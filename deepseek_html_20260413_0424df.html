@@ -5,643 +5,209 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Ordino Yağcı Öneri Sistemi</title>
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            background: #fff5e6;
-            margin: 0;
-            padding: 12px;
-            color: #b85c00;
-        }
-        .container {
-            max-width: 750px;
-            margin: 0 auto;
-        }
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: #fff5e6; margin: 0; padding: 12px; color: #b85c00; }
+        .container { max-width: 750px; margin: 0 auto; }
         .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
-            background: #ffe8d4;
-            padding: 8px;
-            border-radius: 60px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+            background: #ffe8d4; padding: 10px; border-radius: 60px; position: sticky; top: 5px; z-index: 100;
         }
         .tab-btn {
-            flex: 1;
-            background: #ffdec2;
-            border: none;
-            padding: 12px 6px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            color: #b85c00;
-            min-height: 48px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
+            flex: 1; background: #ffdec2; border: none; padding: 14px 8px; border-radius: 50px;
+            font-weight: bold; font-size: 0.85rem; color: #b85c00; min-height: 50px; cursor: pointer;
+            transition: all 0.2s; text-align: center;
         }
-        .tab-btn.active {
-            background: #e67e22;
-            color: white;
-        }
-        .tab-pane {
-            display: none;
-            background: #fffaf5;
-            border-radius: 24px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-        .tab-pane.active {
-            display: block;
-        }
-        h2 {
-            font-size: 1.4rem;
-            margin-top: 0;
-            border-left: 5px solid #e67e22;
-            padding-left: 12px;
-            color: #cc7000;
-        }
-        h3 {
-            color: #cc7000;
-            margin: 16px 0 8px;
-        }
-        .form-card {
-            background: #fff0e0;
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
+        .tab-btn.active { background: #e67e22; color: white; }
+        .tab-btn:active { transform: scale(0.97); }
+        .tab-pane { display: none; background: #fffaf5; border-radius: 24px; padding: 20px 16px; margin-bottom: 20px; }
+        .tab-pane.active { display: block; }
+        h2 { font-size: 1.4rem; margin-top: 0; border-left: 5px solid #e67e22; padding-left: 12px; color: #cc7000; }
+        h3 { color: #cc7000; margin: 16px 0 8px; }
+        .form-card { background: #fff0e0; border-radius: 20px; padding: 16px; margin-bottom: 20px; }
         input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0 12px;
-            border: 1px solid #e6a157;
-            border-radius: 30px;
-            font-size: 1rem;
-            background: white;
-            color: #b85c00;
+            width: 100%; padding: 14px; margin: 8px 0 12px; border: 1px solid #e6a157;
+            border-radius: 30px; font-size: 1rem; background: white; color: #b85c00;
         }
         button {
-            background: #e67e22;
-            color: white;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
-            min-height: 44px;
-            margin: 5px 5px 0 0;
+            background: #e67e22; color: white; border: none; padding: 14px 20px;
+            border-radius: 40px; font-weight: bold; font-size: 1rem; cursor: pointer;
+            min-height: 48px; margin: 5px 5px 0 0;
         }
-        button:active {
-            transform: scale(0.97);
-        }
+        button:active { transform: scale(0.97); }
         button.danger { background: #c0392b; }
         button.secondary { background: #d97a1c; }
-        .item-list {
-            margin-top: 20px;
-            border-top: 1px solid #f0c8a0;
-            padding-top: 12px;
-            max-height: 500px;
-            overflow-y: auto;
+        .item-list { margin-top: 20px; border-top: 1px solid #f0c8a0; padding-top: 12px; max-height: 500px; overflow-y: auto; }
+        .list-item { background: #fff5eb; border-radius: 20px; padding: 14px; margin-bottom: 12px; border: 1px solid #f0c8a0; }
+        .list-item strong { color: #cc7000; }
+        .flex-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .flex-btns button { flex: 1; padding: 10px; font-size: 0.9rem; }
+        .badge { background: #e67e22; color: white; border-radius: 30px; padding: 4px 12px; font-size: 0.7rem; display: inline-block; margin: 4px 4px 0 0; }
+        .info-box { background: #ffefdb; padding: 12px; border-radius: 16px; margin-bottom: 16px; border-left: 4px solid #e67e22; }
+        .recommend-card { background: #fff0e0; border-left: 6px solid #f1c40f; }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #e67e22; color: white; padding: 12px 24px; border-radius: 50px; z-index: 2000; animation: fadeOut 2s forwards; }
+        @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+        .backend-status {
+            background: #e8f5e9; padding: 8px 16px; border-radius: 30px; font-size: 0.8rem;
+            margin-bottom: 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
         }
-        .list-item {
-            background: #fff5eb;
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 12px;
-            border: 1px solid #f0c8a0;
-        }
-        .list-item strong {
-            color: #cc7000;
-        }
-        .flex-btns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .flex-btns button {
-            flex: 1;
-            padding: 8px;
-            font-size: 0.8rem;
-        }
-        .badge {
-            background: #e67e22;
-            color: white;
-            border-radius: 30px;
-            padding: 4px 10px;
-            font-size: 0.7rem;
-            display: inline-block;
-            margin: 4px 4px 0 0;
-        }
-        .info-box {
-            background: #ffefdb;
-            padding: 10px;
-            border-radius: 16px;
-            margin-bottom: 16px;
-            border-left: 4px solid #e67e22;
-            font-size: 0.9rem;
-        }
-        .recommend-card {
-            background: #fff0e0;
-            border-left: 6px solid #f1c40f;
-        }
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #e67e22;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 40px;
-            z-index: 2000;
-            animation: fadeOut 2s forwards;
-            font-size: 0.85rem;
-        }
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            70% { opacity: 1; }
-            100% { opacity: 0; visibility: hidden; }
-        }
-        @media (max-width: 550px) {
-            .tab-btn { font-size: 0.7rem; padding: 10px 4px; }
-            button { font-size: 0.8rem; padding: 10px 12px; }
-        }
+        .status-online { color: #2e7d32; font-weight: bold; }
+        .status-offline { color: #c62828; font-weight: bold; }
+        @media (max-width: 550px) { .tab-btn { font-size: 0.7rem; padding: 12px 4px; } button { font-size: 0.85rem; padding: 12px; } }
     </style>
 </head>
 <body>
 <div class="container">
+    <div class="backend-status" id="backendStatus">
+        🔌 Backend Bağlantısı: <span id="statusText">Kontrol ediliyor...</span>
+        <button onclick="checkBackend()" style="padding: 4px 12px; font-size: 0.7rem;">Yenile</button>
+    </div>
     <div class="tabs">
-        <button class="tab-btn active" data-tab="gemiler">🚢 Gemiler</button>
-        <button class="tab-btn" data-tab="personeller">👥 Personeller</button>
-        <button class="tab-btn" data-tab="bas_makinistler">⚙️ Başmak.</button>
-        <button class="tab-btn" data-tab="izin">📅 İzin</button>
-        <button class="tab-btn" data-tab="oneriler">🎯 Öneri</button>
+        <button class="tab-btn active" onclick="switchTab('gemiler')">🚢 Gemiler</button>
+        <button class="tab-btn" onclick="switchTab('personeller')">👥 Personeller</button>
+        <button class="tab-btn" onclick="switchTab('basmakinistler')">⚙️ Başmak.</button>
+        <button class="tab-btn" onclick="switchTab('izin')">📅 İzin</button>
+        <button class="tab-btn" onclick="switchTab('oneriler')">🎯 Öneri</button>
     </div>
-
-    <!-- Gemiler Bölümü -->
-    <div id="gemiler" class="tab-pane active">
-        <h2>Gemiler</h2>
-        <div class="form-card">
-            <input type="text" id="gemiAdi" placeholder="Gemi Adı">
-            <input type="text" id="makineTipi" placeholder="Makine Tipi">
-            <select id="yagciSayisiTipi">
-                <option value="tek">Tek Yağcı</option>
-                <option value="cift">Çift Yağcı</option>
-            </select>
-            <button id="gemiEkleBtn">➕ Gemi Ekle</button>
-        </div>
-        <div id="gemilerListesi" class="item-list"></div>
-    </div>
-
-    <!-- Personeller Bölümü -->
-    <div id="personeller" class="tab-pane">
-        <h2>Personeller (Yağcılar)</h2>
-        <div class="form-card">
-            <input type="text" id="personelAd" placeholder="Ad Soyad">
-            <select id="vardiyaTipi">
-                <option value="izinci">✅ İzinci (Öncelikli)</option>
-                <option value="grupcu">👥 Grupçu</option>
-                <option value="sabit">⚓ Sabit</option>
-                <option value="tersane">🏭 Tersane</option>
-            </select>
-            <input type="text" id="vardiyaGunleri" placeholder="Vardiya Günleri (örn: Pazartesi,Çarşamba)">
-            <input type="text" id="bildigiMakine" placeholder="Bildiği Makine Tipi">
-            <select id="mevcutGemiSelect"></select>
-            <button id="personelEkleBtn">➕ Personel Ekle</button>
-        </div>
-        <div id="personellerListesi" class="item-list"></div>
-    </div>
-
-    <!-- Başmakinistler -->
-    <div id="bas_makinistler" class="tab-pane">
-        <h2>Başmakinistler & Sorunlu Yağcılar</h2>
-        <div class="form-card">
-            <input type="text" id="bmAd" placeholder="Başmakinist Adı">
-            <select id="bmGemiSelect"></select>
-            <input type="text" id="sorunluYagci" placeholder="Sorun yaşadığı yağcı (adı)">
-            <button id="bmEkleBtn">➕ Başmakinist Ekle</button>
-        </div>
-        <div id="bmListesi" class="item-list"></div>
-    </div>
-
-    <!-- İzin Yönetimi -->
-    <div id="izin" class="tab-pane">
-        <h2>İzin Yönetimi</h2>
-        <div class="form-card">
-            <select id="izinPersonelSec"></select>
-            <input type="date" id="izinBaslangic">
-            <input type="date" id="izinBitis">
-            <button id="izinEkleBtn">📅 İzin Ekle</button>
-        </div>
-        <h3>Mevcut İzinler</h3>
-        <div id="izinlerListesi" class="item-list"></div>
-    </div>
-
-    <!-- Öneri Sistemi -->
-    <div id="oneriler" class="tab-pane">
-        <h2>Yağcı Öneri Sistemi</h2>
-        <div class="form-card">
-            <div class="info-box">📌 İzine çıkan yağcıyı seçin, sistem en uygun 5 yağcıyı önersin.</div>
-            <select id="izneCikanSec"></select>
-            <button id="oneriGetirBtn">🔍 Önerileri Getir</button>
-        </div>
-        <div id="oneriSonuc" class="item-list"></div>
-    </div>
+    <div id="gemiler" class="tab-pane active">Yükleniyor...</div>
+    <div id="personeller" class="tab-pane">Yükleniyor...</div>
+    <div id="basmakinistler" class="tab-pane">Yükleniyor...</div>
+    <div id="izin" class="tab-pane">Yükleniyor...</div>
+    <div id="oneriler" class="tab-pane">Yükleniyor...</div>
 </div>
 
 <script>
-    // ---------- VERİ MODELLERİ ----------
-    let gemiler = [];        // { id, ad, makineTipi, yagciSayisiTipi }
-    let personeller = [];    // { id, adSoyad, vardiyaTipi, vardiyaGunleriStr, bildigiMakine, mevcutGemi }
-    let basMakinistler = []; // { id, ad, mevcutGemi, sorunluYagci }
-    let izinler = [];        // { id, personelId, baslangic, bitis, gunSayisi }
-
-    // Yardımcı
-    function uid() { return Date.now() + '-' + Math.random().toString(36).substr(2, 8); }
-
-    // localStorage işlemleri
-    function kaydet() {
-        const veri = { gemiler, personeller, basMakinistler, izinler };
-        localStorage.setItem('ordinoData', JSON.stringify(veri));
-        gosterToast('✅ Kaydedildi');
+    // 📌 BURAYI COLAB'DAN ALACAĞIN URL İLE DEĞİŞTİR
+    let BACKEND_URL = "https://your-backend-url.ngrok.io";  // <-- DEĞİŞTİR!
+    
+    let gemiler = [], personeller = [], basmakinistler = [], izinler = [];
+    
+    async function checkBackend() {
+        const statusSpan = document.getElementById('statusText');
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/gemiler`);
+            if (res.ok) {
+                statusSpan.innerHTML = '<span class="status-online">✅ Çevrimiçi</span>';
+                return true;
+            }
+        } catch(e) {
+            statusSpan.innerHTML = '<span class="status-offline">❌ Çevrimdışı - Colab çalışıyor mu?</span>';
+        }
+        return false;
     }
-
-    function yukle() {
-        const raw = localStorage.getItem('ordinoData');
-        if (raw) {
-            try {
-                const v = JSON.parse(raw);
-                gemiler = v.gemiler || [];
-                personeller = v.personeller || [];
-                basMakinistler = v.basmakinistler || [];
-                izinler = v.izinler || [];
-            } catch(e) {}
-        }
-        // Demo veri yoksa ekle
-        if (gemiler.length === 0) {
-            gemiler = [
-                { id: 'g1', ad: 'MV ORDINO', makineTipi: 'MAN B&W', yagciSayisiTipi: 'cift' },
-                { id: 'g2', ad: 'GEMI SULTAN', makineTipi: 'Wartsila', yagciSayisiTipi: 'tek' }
-            ];
-            personeller = [
-                { id: 'p1', adSoyad: 'Ali Veli', vardiyaTipi: 'izinci', vardiyaGunleriStr: 'Pazartesi,Çarşamba,Cuma', bildigiMakine: 'MAN B&W', mevcutGemi: '' },
-                { id: 'p2', adSoyad: 'Can Yılmaz', vardiyaTipi: 'grupcu', vardiyaGunleriStr: 'Pazartesi,Salı', bildigiMakine: 'Wartsila', mevcutGemi: '' },
-                { id: 'p3', adSoyad: 'Mehmet Demir', vardiyaTipi: 'sabit', vardiyaGunleriStr: 'Salı,Perşembe,Cumartesi', bildigiMakine: 'MAN B&W', mevcutGemi: 'MV ORDINO' }
-            ];
-            basMakinistler = [];
-            izinler = [];
-            kaydet();
-        }
-        // Gemi seçim dropdownlarını güncellemek için render çağrılacak
+    
+    function showToast(msg) { let t = document.createElement('div'); t.className = 'toast'; t.innerText = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
+    
+    async function fetchData() {
+        const online = await checkBackend();
+        if (!online) return;
+        try {
+            [gemiler, personeller, basmakinistler, izinler] = await Promise.all([
+                fetch(`${BACKEND_URL}/api/gemiler`).then(r => r.json()),
+                fetch(`${BACKEND_URL}/api/personeller`).then(r => r.json()),
+                fetch(`${BACKEND_URL}/api/basmakinistler`).then(r => r.json()),
+                fetch(`${BACKEND_URL}/api/izinler`).then(r => r.json())
+            ]);
+            renderAll();
+        } catch(e) { console.error(e); }
     }
-
-    function gosterToast(msg) {
-        let t = document.createElement('div');
-        t.className = 'toast';
-        t.innerText = msg;
-        document.body.appendChild(t);
-        setTimeout(() => t.remove(), 2000);
+    
+    function renderAll() { renderGemiler(); renderPersoneller(); renderBasmakinistler(); renderIzinler(); renderOneriSecenekleri(); }
+    
+    function renderGemiler() {
+        let html = '<h2>Gemiler</h2><div class="form-card"><input type="text" id="gemiAdi" placeholder="Gemi Adi"><input type="text" id="makineTipi" placeholder="Makine Tipi"><select id="yagciSayisiTipi"><option value="tek">Tek Yagci</option><option value="cift">Cift Yagci</option></select><button onclick="gemiEkle()">+ Gemi Ekle</button></div><div class="item-list">';
+        gemiler.forEach(g => { html += `<div class="list-item"><strong>${escapeHtml(g.ad)}</strong> | ${escapeHtml(g.makineTipi)} | ${g.yagciSayisiTipi}<div class="flex-btns"><button class="secondary" onclick="gemiDuzenle('${g.id}')">Duzenle</button><button class="danger" onclick="gemiSil('${g.id}')">Sil</button></div></div>`; });
+        html += '</div>'; document.getElementById('gemiler').innerHTML = html;
     }
-
-    // İzin kontrolü (bugün için)
-    function izindeMi(personelId) {
-        const bugun = new Date().toISOString().slice(0,10);
-        return izinler.some(i => i.personelId === personelId && bugun >= i.baslangic && bugun <= i.bitis);
+    
+    function renderPersoneller() {
+        let html = '<h2>Personeller</h2><div class="form-card"><input type="text" id="personelAd" placeholder="Ad Soyad"><select id="vardiyaTipi"><option value="izinci">Izinci</option><option value="grupcu">Grupcu</option><option value="sabit">Sabit</option><option value="tersane">Tersane</option></select><input type="text" id="vardiyaGunleri" placeholder="Vardiya Gunleri"><input type="text" id="bildigiMakine" placeholder="Bildigi Makine"><select id="mevcutGemi"><option value="">Atanmamis</option>${gemiler.map(g => `<option value="${escapeHtml(g.ad)}">${escapeHtml(g.ad)}</option>`).join('')}</select><button onclick="personelEkle()">+ Personel Ekle</button></div><div class="item-list">';
+        personeller.forEach(p => { html += `<div class="list-item"><strong>${escapeHtml(p.adSoyad)}</strong> | ${p.vardiyaTipi} | Makine: ${escapeHtml(p.bildigiMakine)}<br>Mevcut Gemi: ${escapeHtml(p.mevcutGemi || 'Atanmamis')}<div class="flex-btns"><button class="secondary" onclick="personelDuzenle('${p.id}')">Duzenle</button><button class="danger" onclick="personelSil('${p.id}')">Sil</button></div></div>`; });
+        html += '</div>'; document.getElementById('personeller').innerHTML = html;
     }
-
-    // Öneri motoru
-    function oneriYap(izneCikanId) {
-        const izneCikan = personeller.find(p => p.id === izneCikanId);
-        if (!izneCikan) return { hata: 'Personel bulunamadı' };
-        const hedefGemi = gemiler.find(g => g.ad === izneCikan.mevcutGemi);
-        if (!hedefGemi) return { hata: 'Bu personelin atandığı gemi bulunamadı' };
-
-        const bugun = new Date().toISOString().slice(0,10);
-        const izinliIds = izinler.filter(i => bugun >= i.baslangic && bugun <= i.bitis).map(i => i.personelId);
-        
-        // O gemideki başmakinistlerin sorunlu listesi
-        const sorunluList = basMakinistler.filter(b => b.mevcutGemi === hedefGemi.ad && b.sorunluYagci).map(b => b.sorunluYagci.toLowerCase());
-
-        let adaylar = personeller.filter(p => {
-            if (p.id === izneCikan.id) return false;
-            if (izinliIds.includes(p.id)) return false;
-            if (p.bildigiMakine !== hedefGemi.makineTipi) return false;
-            if (p.mevcutGemi === hedefGemi.ad) return false;
-            if (sorunluList.includes(p.adSoyad.toLowerCase())) return false;
-            return true;
-        });
-
-        // Puanlama
-        adaylar = adaylar.map(p => {
-            let puan = 0;
-            if (p.vardiyaTipi === 'izinci') puan = 1000;
-            else if (p.vardiyaTipi === 'grupcu') puan = 500;
-            else puan = 200;
-            if (!p.mevcutGemi) puan += 50;
-            return { ...p, puan };
-        });
-        adaylar.sort((a,b) => b.puan - a.puan);
-        const enIyiler = adaylar.slice(0,5);
-        const enKotu = adaylar.length > 5 ? adaylar[adaylar.length-1] : (adaylar.length ? adaylar[adaylar.length-1] : null);
-        return { enIyiler, enKotu, hedefGemi, izneCikanAd: izneCikan.adSoyad };
+    
+    function renderBasmakinistler() {
+        let html = '<h2>Basmakinistler</h2><div class="form-card"><input type="text" id="bmAd" placeholder="Basmakinist Adi"><input type="text" id="bmMevcutGemi" placeholder="Mevcut Gemisi"><input type="text" id="sorunluYagci" placeholder="Sorunlu Yagci"><button onclick="bmEkle()">+ Basmakinist Ekle</button></div><div class="item-list">';
+        basmakinistler.forEach(b => { html += `<div class="list-item"><strong>${escapeHtml(b.ad)}</strong> | Gemi: ${escapeHtml(b.mevcutGemi)} | Sorunlu: ${escapeHtml(b.sorunluYagci || 'Yok')}<div class="flex-btns"><button class="secondary" onclick="bmDuzenle('${b.id}')">Duzenle</button><button class="danger" onclick="bmSil('${b.id}')">Sil</button></div></div>`; });
+        html += '</div>'; document.getElementById('basmakinistler').innerHTML = html;
     }
-
-    // RENDER (tüm arayüz)
-    function render() {
-        // Gemiler listesi
-        const gemilerDiv = document.getElementById('gemilerListesi');
-        if (gemilerDiv) {
-            let html = '';
-            gemiler.forEach(g => {
-                html += `<div class="list-item">
-                    <strong>${escapeHtml(g.ad)}</strong> | ${escapeHtml(g.makineTipi)} | ${g.yagciSayisiTipi}
-                    <div class="flex-btns">
-                        <button class="secondary" data-id="${g.id}" data-action="gemiDuzenle">✏️ Düzenle</button>
-                        <button class="danger" data-id="${g.id}" data-action="gemiSil">🗑 Sil</button>
-                    </div>
-                </div>`;
-            });
-            gemilerDiv.innerHTML = html || '<div class="list-item">Gemi yok</div>';
-        }
-
-        // Personeller listesi
-        const personelDiv = document.getElementById('personellerListesi');
-        if (personelDiv) {
-            let html = '';
-            personeller.forEach(p => {
-                html += `<div class="list-item">
-                    <strong>${escapeHtml(p.adSoyad)}</strong> | ${p.vardiyaTipi} | Makine: ${escapeHtml(p.bildigiMakine)}<br>
-                    Mevcut Gemi: ${escapeHtml(p.mevcutGemi || 'Atanmamış')}
-                    <div class="flex-btns">
-                        <button class="secondary" data-id="${p.id}" data-action="personelDuzenle">✏️ Düzenle</button>
-                        <button class="danger" data-id="${p.id}" data-action="personelSil">🗑 Sil</button>
-                    </div>
-                </div>`;
-            });
-            personelDiv.innerHTML = html || '<div class="list-item">Personel yok</div>';
-        }
-
-        // Başmakinistler listesi
-        const bmDiv = document.getElementById('bmListesi');
-        if (bmDiv) {
-            let html = '';
-            basMakinistler.forEach(b => {
-                html += `<div class="list-item">
-                    <strong>${escapeHtml(b.ad)}</strong> | Gemi: ${escapeHtml(b.mevcutGemi)} | Sorunlu: ${escapeHtml(b.sorunluYagci || 'Yok')}
-                    <div class="flex-btns">
-                        <button class="secondary" data-id="${b.id}" data-action="bmDuzenle">✏️ Düzenle</button>
-                        <button class="danger" data-id="${b.id}" data-action="bmSil">🗑 Sil</button>
-                    </div>
-                </div>`;
-            });
-            bmDiv.innerHTML = html || '<div class="list-item">Başmakinist yok</div>';
-        }
-
-        // İzin dropdown ve listesi
-        const izinSelect = document.getElementById('izinPersonelSec');
-        if (izinSelect) {
-            izinSelect.innerHTML = '<option value="">Personel Seç</option>' + personeller.map(p => `<option value="${p.id}">${escapeHtml(p.adSoyad)}</option>`).join('');
-        }
-        const izinListDiv = document.getElementById('izinlerListesi');
-        if (izinListDiv) {
-            let html = '';
-            izinler.forEach(i => {
-                const p = personeller.find(per => per.id === i.personelId);
-                html += `<div class="list-item">${p ? escapeHtml(p.adSoyad) : 'Silinmiş'} | ${i.baslangic} - ${i.bitis} (${i.gunSayisi} gün) 
-                    <button class="danger" data-id="${i.id}" data-action="izinSil">İptal</button>
-                </div>`;
-            });
-            izinListDiv.innerHTML = html || '<div class="list-item">İzin yok</div>';
-        }
-
-        // Öneri dropdown
-        const oneriSelect = document.getElementById('izneCikanSec');
-        if (oneriSelect) {
-            oneriSelect.innerHTML = '<option value="">-- İzine çıkan yağcıyı seçin --</option>' +
-                personeller.map(p => `<option value="${p.id}">${escapeHtml(p.adSoyad)} (Gemi: ${escapeHtml(p.mevcutGemi || 'Atanmamış')})</option>`).join('');
-        }
-
-        // Dropdown güncellemeleri (personel ekleme formu için)
-        const mevcutGemiSelect = document.getElementById('mevcutGemiSelect');
-        if (mevcutGemiSelect) {
-            mevcutGemiSelect.innerHTML = '<option value="">Atanmamış</option>' + gemiler.map(g => `<option value="${escapeHtml(g.ad)}">${escapeHtml(g.ad)}</option>`).join('');
-        }
-        const bmGemiSelect = document.getElementById('bmGemiSelect');
-        if (bmGemiSelect) {
-            bmGemiSelect.innerHTML = '<option value="">Gemi Seç</option>' + gemiler.map(g => `<option value="${escapeHtml(g.ad)}">${escapeHtml(g.ad)}</option>`).join('');
-        }
+    
+    function renderIzinler() {
+        let html = '<h2>Izin Yonetimi</h2><div class="form-card"><select id="izinPersonelSec"><option value="">Personel Sec</option>${personeller.map(p => `<option value="${p.id}">${escapeHtml(p.adSoyad)}</option>`).join('')}</select><input type="date" id="izinBaslangic"><input type="date" id="izinBitis"><button onclick="izinEkle()">Izin Ekle</button></div><h3>Mevcut Izinler</h3><div class="item-list">';
+        izinler.forEach(i => { let p = personeller.find(p => p.id === i.personelId); html += `<div class="list-item">${p ? escapeHtml(p.adSoyad) : 'Silinmis'} | ${i.baslangic} - ${i.bitis} (${i.gunSayisi} gun) <button class="danger" onclick="izinSil('${i.id}')">Iptal</button></div>`; });
+        html += '</div>'; document.getElementById('izin').innerHTML = html;
     }
-
-    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m; }); }
-
-    // ---------- CRUD İŞLEMLERİ ----------
-    function gemiEkle() {
-        const ad = document.getElementById('gemiAdi').value.trim();
-        const makine = document.getElementById('makineTipi').value.trim();
-        const tip = document.getElementById('yagciSayisiTipi').value;
-        if (!ad || !makine) { alert('Gemi adı ve makine tipi gerekli'); return; }
-        gemiler.push({ id: uid(), ad, makineTipi: makine, yagciSayisiTipi: tip });
-        kaydet();
-        render();
-        document.getElementById('gemiAdi').value = '';
-        document.getElementById('makineTipi').value = '';
+    
+    function renderOneriSecenekleri() {
+        let html = '<h2>Yagci Oneri</h2><div class="form-card"><div class="info-box">Izine cikan yagciyi secin</div><select id="izneCikanYagciSec"><option value="">-- Secin --</option>${personeller.map(p => `<option value="${p.id}">${escapeHtml(p.adSoyad)} (${escapeHtml(p.mevcutGemi || 'Atanmamis')})</option>`).join('')}</select><button onclick="oneriGetir()">Onerileri Getir</button></div><div id="oneriSonuclari" class="item-list"></div>';
+        document.getElementById('oneriler').innerHTML = html;
     }
-
-    function gemiSil(id) {
-        if (confirm('Gemiyi silmek istediğinize emin misiniz?')) {
-            gemiler = gemiler.filter(g => g.id !== id);
-            // Bu gemiye atanmış personellerin mevcutGemi alanını temizle (isteğe bağlı)
-            personeller.forEach(p => { if (p.mevcutGemi === gemiler.find(g => g.id === id)?.ad) p.mevcutGemi = ''; });
-            kaydet();
-            render();
-        }
+    
+    async function gemiEkle() {
+        let ad = document.getElementById('gemiAdi').value.trim();
+        let makine = document.getElementById('makineTipi').value.trim();
+        let tip = document.getElementById('yagciSayisiTipi').value;
+        if (!ad || !makine) { alert('Gemi adi ve makine tipi gerekli'); return; }
+        await fetch(`${BACKEND_URL}/api/gemiler`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: Date.now()+'-'+Math.random(), ad, makineTipi: makine, yagciSayisiTipi: tip }) });
+        showToast('Gemi eklendi'); fetchData();
     }
-
-    function gemiDuzenle(id) {
-        const g = gemiler.find(g => g.id === id);
-        if (!g) return;
-        const yeniAd = prompt('Yeni gemi adı', g.ad);
-        if (yeniAd) g.ad = yeniAd;
-        const yeniMak = prompt('Makine tipi', g.makineTipi);
-        if (yeniMak) g.makineTipi = yeniMak;
-        const yeniTip = prompt('Tek/Çift (tek/cift)', g.yagciSayisiTipi);
-        if (yeniTip === 'tek' || yeniTip === 'cift') g.yagciSayisiTipi = yeniTip;
-        kaydet();
-        render();
-    }
-
-    function personelEkle() {
-        const ad = document.getElementById('personelAd').value.trim();
-        const tip = document.getElementById('vardiyaTipi').value;
-        const vGun = document.getElementById('vardiyaGunleri').value;
-        const makine = document.getElementById('bildigiMakine').value.trim();
-        const mevcut = document.getElementById('mevcutGemiSelect').value;
+    
+    async function personelEkle() {
+        let ad = document.getElementById('personelAd').value.trim();
+        let tip = document.getElementById('vardiyaTipi').value;
+        let vGun = document.getElementById('vardiyaGunleri').value;
+        let makine = document.getElementById('bildigiMakine').value.trim();
+        let mevcut = document.getElementById('mevcutGemi').value;
         if (!ad || !makine) { alert('Ad ve makine bilgisi zorunlu'); return; }
-        personeller.push({
-            id: uid(), adSoyad: ad, vardiyaTipi: tip, vardiyaGunleriStr: vGun,
-            bildigiMakine: makine, mevcutGemi: mevcut || ''
-        });
-        kaydet();
-        render();
-        document.getElementById('personelAd').value = '';
-        document.getElementById('vardiyaGunleri').value = '';
-        document.getElementById('bildigiMakine').value = '';
+        await fetch(`${BACKEND_URL}/api/personeller`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: Date.now()+'-'+Math.random(), adSoyad: ad, vardiyaTipi: tip, vardiyaGunleriStr: vGun, bildigiMakine: makine, mevcutGemi: mevcut }) });
+        showToast('Personel eklendi'); fetchData();
     }
-
-    function personelSil(id) {
-        if (confirm('Personeli silmek istediğinize emin misiniz?')) {
-            personeller = personeller.filter(p => p.id !== id);
-            izinler = izinler.filter(i => i.personelId !== id);
-            kaydet();
-            render();
-        }
+    
+    async function bmEkle() {
+        let ad = document.getElementById('bmAd').value.trim();
+        let gemi = document.getElementById('bmMevcutGemi').value.trim();
+        let sorunlu = document.getElementById('sorunluYagci').value.trim();
+        if (!ad) { alert('Basmakinist adi girin'); return; }
+        await fetch(`${BACKEND_URL}/api/basmakinistler`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: Date.now()+'-'+Math.random(), ad, mevcutGemi: gemi, sorunluYagci: sorunlu }) });
+        showToast('Basmakinist eklendi'); fetchData();
     }
-
-    function personelDuzenle(id) {
-        const p = personeller.find(p => p.id === id);
-        if (!p) return;
-        p.adSoyad = prompt('Ad Soyad', p.adSoyad) || p.adSoyad;
-        p.vardiyaTipi = prompt('Tip (izinci/grupcu/sabit/tersane)', p.vardiyaTipi) || p.vardiyaTipi;
-        p.vardiyaGunleriStr = prompt('Vardiya Günleri', p.vardiyaGunleriStr);
-        p.bildigiMakine = prompt('Bildiği Makine', p.bildigiMakine) || p.bildigiMakine;
-        p.mevcutGemi = prompt('Mevcut Gemisi', p.mevcutGemi);
-        kaydet();
-        render();
+    
+    async function izinEkle() {
+        let pid = document.getElementById('izinPersonelSec').value;
+        let bas = document.getElementById('izinBaslangic').value;
+        let bit = document.getElementById('izinBitis').value;
+        if (!pid || !bas || !bit) { alert('Tum alanlari doldurun'); return; }
+        let gun = Math.ceil((new Date(bit) - new Date(bas)) / (1000*60*60*24)) + 1;
+        await fetch(`${BACKEND_URL}/api/izinler`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: Date.now()+'-'+Math.random(), personelId: pid, baslangic: bas, bitis: bit, gunSayisi: gun }) });
+        showToast('Izin eklendi'); fetchData();
     }
-
-    function bmEkle() {
-        const ad = document.getElementById('bmAd').value.trim();
-        const gemi = document.getElementById('bmGemiSelect').value;
-        const sorunlu = document.getElementById('sorunluYagci').value.trim();
-        if (!ad) { alert('Başmakinist adı girin'); return; }
-        basMakinistler.push({ id: uid(), ad, mevcutGemi: gemi || '', sorunluYagci: sorunlu || '' });
-        kaydet();
-        render();
-        document.getElementById('bmAd').value = '';
-        document.getElementById('sorunluYagci').value = '';
+    
+    async function oneriGetir() {
+        let yagciId = document.getElementById('izneCikanYagciSec').value;
+        if (!yagciId) { alert('Lutfen izne cikan yagciyi secin'); return; }
+        let res = await fetch(`${BACKEND_URL}/api/oneriler`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ izneCikanId: yagciId }) });
+        let result = await res.json();
+        if (result.hata) { document.getElementById('oneriSonuclari').innerHTML = `<div class="info-box">${result.hata}</div>`; return; }
+        if (!result.enIyiler || result.enIyiler.length === 0) { document.getElementById('oneriSonuclari').innerHTML = `<div class="info-box">Uygun yagci bulunamadi</div>`; return; }
+        let html = `<div class="info-box">Izine Cikan: ${escapeHtml(result.izneCikanAd)}<br>Gemisi: ${escapeHtml(result.hedefGemi.ad)} (${escapeHtml(result.hedefGemi.makineTipi)})</div><h3>EN IYI 5 YAGCI</h3>`;
+        result.enIyiler.forEach((p, idx) => { html += `<div class="list-item recommend-card"><strong>${idx+1}. ${p.adSoyad}</strong><br><span class="badge">${p.vardiyaTipi}</span> Makine: ${escapeHtml(p.bildigiMakine)} | Puan: ${p.puan}</div>`; });
+        if (result.enKotu) html += `<hr><div class="list-item" style="background:#ffe0e0;"><strong>EN DUSUK PUANLI:</strong> ${escapeHtml(result.enKotu.adSoyad)}</div>`;
+        document.getElementById('oneriSonuclari').innerHTML = html;
     }
-
-    function bmSil(id) {
-        if (confirm('Başmakinisti sil?')) {
-            basMakinistler = basMakinistler.filter(b => b.id !== id);
-            kaydet();
-            render();
-        }
-    }
-
-    function bmDuzenle(id) {
-        const b = basMakinistler.find(b => b.id === id);
-        if (!b) return;
-        b.ad = prompt('Ad', b.ad) || b.ad;
-        b.mevcutGemi = prompt('Mevcut Gemi', b.mevcutGemi);
-        b.sorunluYagci = prompt('Sorunlu Yağcı', b.sorunluYagci);
-        kaydet();
-        render();
-    }
-
-    function izinEkle() {
-        const pid = document.getElementById('izinPersonelSec').value;
-        const bas = document.getElementById('izinBaslangic').value;
-        const bit = document.getElementById('izinBitis').value;
-        if (!pid || !bas || !bit) { alert('Tüm alanları doldurun'); return; }
-        const start = new Date(bas), end = new Date(bit);
-        if (start > end) { alert('Bitiş tarihi başlangıçtan önce olamaz'); return; }
-        const gun = Math.ceil((end - start) / (1000*60*60*24)) + 1;
-        izinler.push({ id: uid(), personelId: pid, baslangic: bas, bitis: bit, gunSayisi: gun });
-        kaydet();
-        render();
-        document.getElementById('izinBaslangic').value = '';
-        document.getElementById('izinBitis').value = '';
-    }
-
-    function izinSil(id) {
-        izinler = izinler.filter(i => i.id !== id);
-        kaydet();
-        render();
-    }
-
-    function oneriGetir() {
-        const secilenId = document.getElementById('izneCikanSec').value;
-        if (!secilenId) { alert('Lütfen izne çıkan yağcıyı seçin'); return; }
-        const sonuc = oneriYap(secilenId);
-        const sonucDiv = document.getElementById('oneriSonuc');
-        if (sonuc.hata) {
-            sonucDiv.innerHTML = `<div class="info-box">❌ ${sonuc.hata}</div>`;
-            return;
-        }
-        if (!sonuc.enIyiler.length) {
-            sonucDiv.innerHTML = `<div class="info-box">😔 ${sonuc.izneCikanAd} için uygun yağcı bulunamadı.</div>`;
-            return;
-        }
-        let html = `<div class="info-box">📍 İzine Çıkan: ${escapeHtml(sonuc.izneCikanAd)}<br>🚢 Gemisi: ${escapeHtml(sonuc.hedefGemi.ad)} (${escapeHtml(sonuc.hedefGemi.makineTipi)})</div>`;
-        html += '<h3>⭐ En İyi 5 Yağcı Önerisi</h3>';
-        sonuc.enIyiler.forEach((p, idx) => {
-            let emoji = p.vardiyaTipi === 'izinci' ? '✅' : (p.vardiyaTipi === 'grupcu' ? '👥' : '⚓');
-            html += `<div class="list-item recommend-card">
-                <strong>${idx+1}. ${emoji} ${escapeHtml(p.adSoyad)}</strong><br>
-                <span class="badge">${p.vardiyaTipi}</span> Makine: ${escapeHtml(p.bildigiMakine)} | Mevcut Gemi: ${escapeHtml(p.mevcutGemi || 'Yok')} | Puan: ${p.puan}
-            </div>`;
-        });
-        if (sonuc.enKotu) {
-            html += `<hr><div class="list-item" style="background:#ffe0e0;"><strong>⚠️ En Düşük Puanlı:</strong> ${escapeHtml(sonuc.enKotu.adSoyad)} (Puan: ${sonuc.enKotu.puan})</div>`;
-        }
-        sonucDiv.innerHTML = html;
-    }
-
-    // Buton ve event delegation (dinamik tıklamalar)
-    function attachGlobalEvents() {
-        // Gemiler butonları
-        document.getElementById('gemiEkleBtn').onclick = gemiEkle;
-        document.getElementById('personelEkleBtn').onclick = personelEkle;
-        document.getElementById('bmEkleBtn').onclick = bmEkle;
-        document.getElementById('izinEkleBtn').onclick = izinEkle;
-        document.getElementById('oneriGetirBtn').onclick = oneriGetir;
-
-        // Dinamik butonlar için event delegation
-        document.body.addEventListener('click', (e) => {
-            const btn = e.target.closest('button');
-            if (!btn) return;
-            const action = btn.getAttribute('data-action');
-            const id = btn.getAttribute('data-id');
-            if (action === 'gemiSil') gemiSil(id);
-            else if (action === 'gemiDuzenle') gemiDuzenle(id);
-            else if (action === 'personelSil') personelSil(id);
-            else if (action === 'personelDuzenle') personelDuzenle(id);
-            else if (action === 'bmSil') bmSil(id);
-            else if (action === 'bmDuzenle') bmDuzenle(id);
-            else if (action === 'izinSil') izinSil(id);
-        });
-    }
-
-    // Sekme geçişleri
-    function initTabs() {
-        const tabs = document.querySelectorAll('.tab-btn');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const tabId = tab.getAttribute('data-tab');
-                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-                document.getElementById(tabId).classList.add('active');
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-            });
-        });
-    }
-
-    // Başlat
-    yukle();
-    render();
-    attachGlobalEvents();
-    initTabs();
-    gosterToast('✅ Sistem hazır - Veriler telefonunuzda saklanacak');
+    
+    async function gemiSil(id) { if(confirm('Sil?')){ await fetch(`${BACKEND_URL}/api/gemiler/${id}`, { method: 'DELETE' }); showToast('Silindi'); fetchData(); } }
+    async function personelSil(id) { if(confirm('Sil?')){ await fetch(`${BACKEND_URL}/api/personeller/${id}`, { method: 'DELETE' }); showToast('Silindi'); fetchData(); } }
+    async function bmSil(id) { if(confirm('Sil?')){ await fetch(`${BACKEND_URL}/api/basmakinistler/${id}`, { method: 'DELETE' }); showToast('Silindi'); fetchData(); } }
+    async function izinSil(id) { await fetch(`${BACKEND_URL}/api/izinler/${id}`, { method: 'DELETE' }); showToast('Izin iptal'); fetchData(); }
+    
+    function gemiDuzenle(id) { let g = gemiler.find(g => g.id === id); if(g){ let yeniAd = prompt('Yeni ad', g.ad); if(yeniAd) g.ad = yeniAd; let yeniMak = prompt('Makine tipi', g.makineTipi); if(yeniMak) g.makineTipi = yeniMak; let yeniTip = prompt('Tek/Cift', g.yagciSayisiTipi); if(yeniTip === 'tek' || yeniTip === 'cift') g.yagciSayisiTipi = yeniTip; fetch(`${BACKEND_URL}/api/gemiler/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(g) }).then(() => fetchData()); } }
+    function personelDuzenle(id) { let p = personeller.find(p => p.id === id); if(p){ p.adSoyad = prompt('Ad Soyad', p.adSoyad) || p.adSoyad; p.vardiyaTipi = prompt('Tip', p.vardiyaTipi) || p.vardiyaTipi; p.vardiyaGunleriStr = prompt('Vardiya Gunleri', p.vardiyaGunleriStr); p.bildigiMakine = prompt('Makine', p.bildigiMakine) || p.bildigiMakine; p.mevcutGemi = prompt('Mevcut Gemi', p.mevcutGemi); fetch(`${BACKEND_URL}/api/personeller/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) }).then(() => fetchData()); } }
+    function bmDuzenle(id) { let b = basmakinistler.find(b => b.id === id); if(b){ b.ad = prompt('Ad', b.ad) || b.ad; b.mevcutGemi = prompt('Gemi', b.mevcutGemi); b.sorunluYagci = prompt('Sorunlu Yagci', b.sorunluYagci); fetch(`${BACKEND_URL}/api/basmakinistler/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b) }).then(() => fetchData()); } }
+    
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m) { if(m === '&') return '&amp;'; if(m === '<') return '&lt;'; if(m === '>') return '&gt;'; return m; }); }
+    function switchTab(tabId) { document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); document.getElementById(tabId).classList.add('active'); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); }
+    
+    fetchData();
+    setInterval(checkBackend, 30000);
 </script>
 </body>
 </html>
